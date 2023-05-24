@@ -1,13 +1,12 @@
-import pkg from "express";
+import express from "express";
 import mongoose from "mongoose";
-import userRoute from "./routes/user.js"
-import authRoute from "./routes/auth.js";
+import userRouter from "./routes/user.js";
+import authRouter from "./routes/auth.js";
+import dotenv from "dotenv";
 
-
-const { express } = pkg;
+dotenv.config();
 const app = express();
-
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -15,8 +14,8 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use(express.json());
-app.use("/api/v1/auth", authRoute);
-app.use("/api/v1/user", userRoute);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
 
 app.listen(PORT, () => {
   console.log(`backend server is running on port ${PORT}`);

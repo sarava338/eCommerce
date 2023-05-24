@@ -1,5 +1,6 @@
-const router = require("express").Router();
-const User = require("../models/User");
+import express from "express";
+
+const router = express.Router();
 
 //Register
 router.post("/auth/", async (req, res) => {

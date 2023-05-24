@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
-const {Schema} = mongoose;
-// const mongoose = require("mongoose");
-// const { boolean } = require("webidl-conversions");
 
-const UserSchema = new Schema(
+const UserSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
@@ -13,4 +10,5 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", UserSchema);
+const UserModel = mongoose.model("users", UserSchema);
+export { UserModel };

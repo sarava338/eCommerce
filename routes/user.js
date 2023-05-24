@@ -1,10 +1,12 @@
-const router = require("express").Router();
+import express from "express";
 
-router.get("/get", (req, res) => {
+const router = express.Router();
+
+router.get("/test", (req, res) => {
   res.send("user test success");
 });
 
-router.post("/", (req, res) => {
+router.post("/signup", (req, res) => {
   const username = req.body.username;
   res.send(`your username is ${username}`);
 });
