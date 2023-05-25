@@ -1,21 +1,16 @@
 import express from "express";
+import { createUser } from "../db.js";
 
 const router = express.Router();
 
-//Register
-router.post("/auth/", async (req, res) => {
-  const user = new User({
+router.post("/auth/signup", async (req, res) => {
+  createUser({
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
-  });
-
-  try {
-    const savedUser = user.save();
-    res.status(201).json(savedUser);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  })
+    .then((user) => res.status(201).json(user))
+    .catch((err) => res.status(500).json(err));
 });
 
 export default router;

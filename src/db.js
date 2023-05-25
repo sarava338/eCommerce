@@ -1,13 +1,14 @@
-import UserModel from "./models/User";
-import ProductModel from "./models/Product";
-import CartModel from "./models/Cart";
-import OrderModel from "./models/Order";
+import UserModel from "./models/User.js";
+import ProductModel from "./models/Product.js";
+import CartModel from "./models/Cart.js";
+import OrderModel from "./models/Order.js";
 
 //create docs for models relatively. It will return doc of model of schema of mongoose
-export const createUser = async (user) => await new UserModel(user);
-export const createProduct = async (product) => await new ProductModel(product);
-export const createCart = async (cart) => await new CartModel(cart);
-export const createOrder = async (order) => await new OrderModel(order);
+export const createUser = async (user) => await new UserModel(user).save();
+export const createProduct = async (product) =>
+  await new ProductModel(product).save();
+export const createCart = async (cart) => await new CartModel(cart).save();
+export const createOrder = async (order) => await new OrderModel(order).save();
 
 // find the doc for models relatively. It will return doc
 export const findUserById = async (id) => await UserModel.findById(id);

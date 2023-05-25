@@ -16,8 +16,7 @@ main()
   .catch((err) => console.log(err));
 
 app.use(express.json());
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/user", userRouter);
+app.use(process.env.API_BASEPATH, authRouter, userRouter);
 
 app.listen(PORT, () => {
   console.log(`backend server is running on port ${PORT}`);
