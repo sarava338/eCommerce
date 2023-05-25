@@ -8,8 +8,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-mongoose
-  .connect(process.env.MONGO_URL)
+async function main() {
+  mongoose.connect(process.env.MONGO_URL);
+}
+main()
   .then(() => console.log("db connection is successful"))
   .catch((err) => console.log(err));
 
