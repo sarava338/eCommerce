@@ -8,16 +8,17 @@ import userRouter from "./api/v1/routes/user.js";
 import productRouter from "./api/v1/routes/product.js";
 import cartRouter from "./api/v1/routes/cart.js";
 import orderRouter from "./api/v1/routes/order.js";
+import Log from "./libraries/Log.js";
 
 const app = express();
 
 mongoose
   .connect(config.mongooseUrl)
   .then(() => {
-    console.log("db connection is successful");
+    Log.success("connected to mongoDB");
     startServer();
   })
-  .catch((err) => console.log(err));
+  .catch((err) => Log.error("mongoDB not connected", err));
 
 const startServer = () => {
   app.use(express.json());
@@ -30,6 +31,6 @@ const startServer = () => {
   ]);
 
   app.listen(config.port, () => {
-    console.log(`backend server is running on port ${config.port}`);
+    Log.success(`server is running on port ${config.port}`);
   });
 };
