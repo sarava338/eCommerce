@@ -22,7 +22,10 @@ mongoose
 
 const startServer = () => {
   app.use(express.json());
-  app.use(process.env.API_BASEPATH, [
+  app.use(express.urlencoded({ extended: true }));
+
+  /** Routes */
+  app.use("/api", [
     authRouter,
     userRouter,
     productRouter,
@@ -30,6 +33,7 @@ const startServer = () => {
     orderRouter,
   ]);
 
+  /**  Listen */
   app.listen(config.port, () => {
     Log.success(`server is running on port ${config.port}`);
   });
