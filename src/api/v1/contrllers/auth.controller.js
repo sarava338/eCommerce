@@ -1,5 +1,5 @@
 import { createUser, findUserByUserName } from "../models/User.js";
-import { getToken } from "../services/jwt.js";
+import { getToken } from "../services/jwt.service.js";
 import { decryptPassword, encryptPassword } from "../helpers/crypto.help.js";
 import { getUserWithoutPassword } from "../helpers/user.help.js";
 

@@ -1,6 +1,6 @@
 import express from "express";
-import { verifyTokenAndAuthorization } from "../services/jwt.js";
-import { deleteUser, updateUser } from "../contrllers/userController.js";
+import { verifyTokenAndAuthorization } from "../services/jwt.service.js";
+import { deleteUser, updateUser } from "../contrllers/user.controller.js";
 
 const router = express.Router();
 
