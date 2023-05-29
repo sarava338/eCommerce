@@ -17,7 +17,7 @@ export const createUser = async (user) => await new UserModel(user).save();
 export const findUserByUserName = async (username) =>
   await UserModel.findOne(username);
 export const findUserById = async (id) => await UserModel.findById(id);
-export const updateUserById = async (id) =>
-  await UserModel.findByIdAndUpdate(id);
+export const updateUserById = async (id, user) =>
+  await UserModel.findByIdAndUpdate(id, user, { new: true });
 export const deleteUserById = async (id) =>
   await UserModel.findByIdAndDelete(id);

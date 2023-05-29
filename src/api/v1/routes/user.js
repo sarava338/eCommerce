@@ -1,14 +1,11 @@
 import express from "express";
+import { verifyTokenAndAuthorization } from "../services/jwt.js";
+import { deleteUser, updateUser } from "../contrllers/userController.js";
 
 const router = express.Router();
 
-router.get("/test", (req, res) => {
-  res.send("user test success");
-});
+router.put("/v1/user/:id", verifyTokenAndAuthorization, updateUser);
 
-router.post("/signup", (req, res) => {
-  const username = req.body.username;
-  res.send(`your username is ${username}`);
-});
+router.delete("/v1/user/:id", verifyTokenAndAuthorization, deleteUser);
 
 export default router;
