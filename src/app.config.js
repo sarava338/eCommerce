@@ -5,4 +5,5 @@ dotenv.config();
 export const config = {
   port: process.env.PORT,
   mongooseUrl: process.env.MONGO_URL,
+  apiBasePath: process.env.API_BASEPATH,
 };

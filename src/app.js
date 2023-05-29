@@ -25,7 +25,7 @@ const startServer = () => {
   app.use(express.urlencoded({ extended: true }));
 
   /** Routes */
-  app.use("/api", [
+  app.use(config.apiBasePath, [
     authRouter,
     userRouter,
     productRouter,

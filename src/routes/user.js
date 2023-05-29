@@ -4,8 +4,8 @@ import { deleteUser, updateUser } from "../contrllers/user.controller.js";
 
 const router = express.Router();
 
-router.put("/v1/user/:id", verifyTokenAndAuthorization, updateUser);
+router.put("/user/:id", verifyTokenAndAuthorization, updateUser);
 
-router.delete("/v1/user/:id", verifyTokenAndAuthorization, deleteUser);
+router.delete("/user/:id", verifyTokenAndAuthorization, deleteUser);
 
 export default router;

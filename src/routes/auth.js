@@ -6,9 +6,9 @@ const router = express.Router();
 // router.use("/v1/auth", register, login)
 
 //REGISTER
-router.post("/v1/auth/register", register);
+router.post("/auth/register", register);
 
 //LOGIN
-router.post("/v1/auth/login", login);
+router.post("/auth/login", login);
 
 export default router;
