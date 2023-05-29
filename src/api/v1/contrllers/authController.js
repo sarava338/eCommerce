@@ -1,6 +1,7 @@
 import { createUser, findUserByUserName } from "../models/User.js";
-import { decryptPassword, encryptPassword } from "../helpers/crypto.js";
-import jwt from "jsonwebtoken";
+import { getToken } from "../services/jwt.js";
+import { decryptPassword, encryptPassword } from "../helpers/crypto.help.js";
+import { getUserWithoutPassword } from "../helpers/user.help.js";
 
 /** Register */
 export const register = async (req, res) => {
@@ -18,22 +19,15 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   findUserByUserName({ username: req.body.username })
     .then((user) => {
-      if (!user) return res.status(401).json({ message: "Unauthorized user" });
       if (req.body.password !== decryptPassword(user.password))
-        return res.status(403).json({ message: "Forbidden" });
+        return res.status(403).json({ message: "Forbidden credential" });
 
-      const { password, ...userWithoutPassword } = user._doc;
+      if (!user) return res.status(404).json({ message: "User not found" });
 
-      const accessToken = jwt.sign(
-        {
-          id: user._id,
-          isAdmin: user.isAdmin,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "3d" }
-      );
-
-      res.status(200).json({ ...userWithoutPassword, accessToken });
+      res.status(200).json({
+        ...getUserWithoutPassword(user),
+        ...getToken(user)
+      });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => res.status(404).json({ message: "User not found" }));
 };

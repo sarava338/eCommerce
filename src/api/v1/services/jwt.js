@@ -1,5 +1,17 @@
 import jwt from "jsonwebtoken";
 
+export const getToken = (user) => {
+  const token = jwt.sign(
+    {
+      id: user._id,
+      isAdmin: user.isAdmin,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "3d" }
+  );
+  return { token };
+};
+
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers;
 
@@ -18,14 +30,16 @@ export const verifyToken = (req, res, next) => {
 
 export const verifyTokenAndAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.isAdmin) next();
-    else return res.status(401).json({ message: "Unauthorized user" });
+    if (!req.user.isAdmin)
+      return res.status(401).json({ message: "Unauthorized admin" });
+    else next();
   });
 };
 
 export const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) next();
-    else return res.status(401).json({ message: "Unauthorized user" });
+    if (!(req.user.id === req.params.id || req.user.isAdmin))
+      return res.status(401).json({ message: "Unauthorized user" });
+    else next();
   });
 };
