@@ -7,5 +7,3 @@ export const decryptPassword = (encryptedPassword) =>
   CryptoJS.AES.decrypt(encryptedPassword, process.env.CRYPTO_SECRET).toString(
     CryptoJS.enc.Utf8
   );
-
-// export const authenticationAndAutherization = () => {}
