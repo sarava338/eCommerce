@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 
 import { config } from "./app.config.js";
 
-import authRouter from "./api/v1/routes/auth.js";
-import userRouter from "./api/v1/routes/user.js";
-import productRouter from "./api/v1/routes/product.js";
-import cartRouter from "./api/v1/routes/cart.js";
-import orderRouter from "./api/v1/routes/order.js";
+import authRouter from "./routes/auth.js";
+import userRouter from "./routes/user.js";
+import productRouter from "./routes/product.js";
+import cartRouter from "./routes/cart.js";
+import orderRouter from "./routes/order.js";
 import Log from "./libraries/Log.js";
 
 const app = express();
