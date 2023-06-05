@@ -24,6 +24,12 @@ const startServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+
+  app.use("*", (req, res, next) => {
+    Log.info("[METHOD]", req.method, "[URL]", req.originalUrl);
+    next();
+  });
+
   /** Routes */
   app.use(config.apiBasePath, [
     authRouter,

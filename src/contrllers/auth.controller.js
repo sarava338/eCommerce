@@ -1,6 +1,6 @@
 import { createUser, findUserByUserName } from "../models/User.js";
 import { getToken } from "../services/jwt.service.js";
-import { decryptPassword, encryptPassword } from "../helpers/crypto.help.js";
+import { decryptPassword, encryptPassword } from "../services/crypto.service.js";
 import { getUserWithoutPassword } from "../helpers/user.help.js";
 
 /** Register */

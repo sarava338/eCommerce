@@ -5,7 +5,7 @@ export default class Log {
     console.log(
       `[${new Date().toLocaleString()}]`,
       chalk.blue(`[INFO]`),
-      chalk.blueBright(args)
+      ...args
     );
   };
 
@@ -13,7 +13,7 @@ export default class Log {
     console.log(
       `[${new Date().toLocaleString()}]`,
       chalk.green(`[SUCCESS]`),
-      chalk.greenBright(args)
+      ...args
     );
   };
 
@@ -21,7 +21,7 @@ export default class Log {
     console.log(
       `[${new Date().toLocaleString()}]`,
       chalk.yellow(`[WARN]`),
-      chalk.yellowBright(args)
+      ...args
     );
   };
 
@@ -29,7 +29,7 @@ export default class Log {
     console.log(
       `[${new Date().toLocaleString()}]`,
       chalk.red(`[ERROR] `),
-      chalk.redBright(args)
+      ...args
     );
   };
 }
