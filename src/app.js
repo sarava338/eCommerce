@@ -9,6 +9,10 @@ import productRouter from "./routes/product.js";
 import cartRouter from "./routes/cart.js";
 import orderRouter from "./routes/order.js";
 import Log from "./libraries/Log.js";
+import {
+  logEveryRequest,
+  logEveryResponse,
+} from "./middleware/log.middleware.js";
 
 const app = express();
 
@@ -24,18 +28,8 @@ const startServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  /** Loging every request */
-  app.use("*", (req, res, next) => {
-    Log.info(
-      "[METHOD]",
-      req.method,
-      "[URL]",
-      req.originalUrl,
-      "[BODY]",
-      req.body
-    );
-    next();
-  });
+  /** Loging */
+  app.use("*", logEveryRequest, logEveryResponse);
 
   /** Routes */
   app.use(config.apiBasePath, [
