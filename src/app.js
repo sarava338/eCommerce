@@ -11,7 +11,6 @@ import orderRouter from "./routes/order.js";
 import Log from "./libraries/Log.js";
 import {
   logEveryRequest,
-  logEveryResponse,
 } from "./middleware/log.middleware.js";
 
 const app = express();
@@ -29,7 +28,7 @@ const startServer = () => {
   app.use(express.urlencoded({ extended: true }));
 
   /** Loging */
-  app.use("*", logEveryRequest, logEveryResponse);
+  app.use("*", logEveryRequest);
 
   /** Routes */
   app.use(config.apiBasePath, [
