@@ -24,9 +24,16 @@ const startServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-
+  /** Loging every request */
   app.use("*", (req, res, next) => {
-    Log.info("[METHOD]", req.method, "[URL]", req.originalUrl);
+    Log.info(
+      "[METHOD]",
+      req.method,
+      "[URL]",
+      req.originalUrl,
+      "[BODY]",
+      req.body
+    );
     next();
   });
 
