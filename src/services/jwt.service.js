@@ -5,7 +5,7 @@ export const generateToken = (user) => {
   const token = jwt.sign(
     {
       id: user._id,
-      isAdmin: user.isAdmin,
+      role: user.role,
     },
     config.jwtSecret,
     { expiresIn: "3d" }

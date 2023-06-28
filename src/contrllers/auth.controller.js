@@ -13,7 +13,7 @@ export const register = async (req, res) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: encryptPassword(req.body.password),
-    isAdmin: req.body.isAdmin,
+    role: req.body.role,
   })
     .then((user) =>
       res.status(201).json({
