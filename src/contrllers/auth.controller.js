@@ -22,10 +22,9 @@ export const register = async (req, res) => {
       })
     )
     .catch((err) => {
-      if (err.code == 11000)
-        /** Dublicate resource */
+      if (err.code == 11000 /** Dublicate resource code */)
         return res.status(403).json({ message: "User already exists" });
-      return res.status(500).json(err); /** All other errors */
+      return res.status(500).json(err);
     });
 };
 
