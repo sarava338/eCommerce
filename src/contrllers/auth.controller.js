@@ -21,7 +21,12 @@ export const register = async (req, res) => {
         ...getToken(user),
       })
     )
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => {
+      if (err.code == 11000)
+        /** Dublicate resource */
+        return res.status(403).json({ message: "User already exists" });
+      return res.status(500).json(err); /** All other errors */
+    });
 };
 
 /** Login */
