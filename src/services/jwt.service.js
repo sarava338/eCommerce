@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { config } from "../app.config.js";
 
 export const getToken = (user) => {
   const token = jwt.sign(
@@ -6,7 +7,7 @@ export const getToken = (user) => {
       id: user._id,
       isAdmin: user.isAdmin,
     },
-    process.env.JWT_SECRET,
+    config.jwtSecret,
     { expiresIn: "3d" }
   );
   return { token };

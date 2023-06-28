@@ -1,3 +1,5 @@
+import { config } from "../app.config.js";
+
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers;
 
@@ -6,7 +8,7 @@ export const verifyToken = (req, res, next) => {
 
   const token = authHeader.token.split(" ")[1];
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, config.jwtSecret, (err, user) => {
     req.user = user;
     if (err) return res.status(403).json({ message: "Token not valid" });
   });
