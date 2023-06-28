@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ProductModel = mongoose.model("products", ProductSchema);
+const ProductModel = mongoose.model("Product", ProductSchema);
 export default ProductModel;
 
 export const createProduct = async (product) =>

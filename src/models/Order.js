@@ -13,7 +13,7 @@ const OrderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const OrderModel = mongoose.model("orders", OrderSchema);
+const OrderModel = mongoose.model("Order", OrderSchema);
 export default OrderModel;
 
 export const createOrder = async (order) => await new OrderModel(order).save();

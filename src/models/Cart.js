@@ -15,7 +15,7 @@ const CartSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const CartModel = mongoose.model("carts", CartSchema);
+const CartModel = mongoose.model("Cart", CartSchema);
 export default CartModel;
 
 export const createCart = async (cart) => await new CartModel(cart).save();
