@@ -26,7 +26,7 @@ export const register = async (req, res) => {
 
 /** Login */
 export const login = async (req, res) => {
-  findUserByUserName({ email: req.body.email })
+  findUserByEmail({ email: req.body.email })
     .then((user) => {
       if (req.body.password !== decryptPassword(user.password))
         return res.status(403).json({ message: "Forbidden credential" });
