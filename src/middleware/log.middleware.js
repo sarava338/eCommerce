@@ -7,7 +7,7 @@ export const logEveryRequest = (req, res, next) => {
     req.method,
     "[URL]",
     req.originalUrl,
-    "[BODY]",
+    "[REQ]",
     req.body
   );
   next();
@@ -22,7 +22,7 @@ export const logEveryResponse = (req, res, next) => {
       req.method,
       "[URL]",
       req.originalUrl,
-      "[CODE]",
+      "[REQ]",
       statusCode
     );
   else if (statusCode >= 400 && statusCode < 600)
