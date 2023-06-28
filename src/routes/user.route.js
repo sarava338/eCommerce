@@ -1,6 +1,6 @@
 import express from "express";
-import { verifyTokenAndAuthorization } from "../services/jwt.service.js";
 import { deleteUser, updateUser } from "../contrllers/user.controller.js";
+import { verifyTokenAndAuthorization } from "../middleware/jwt.middleware.js";
 
 const router = express.Router();
 
