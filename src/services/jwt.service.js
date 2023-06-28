@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { config } from "../app.config.js";
 
-export const getToken = (user) => {
+export const generateToken = (user) => {
   const token = jwt.sign(
     {
       id: user._id,

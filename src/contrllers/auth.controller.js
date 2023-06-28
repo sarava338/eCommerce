@@ -1,5 +1,5 @@
 import { createUser, findUserByEmail } from "../models/User.js";
-import { getToken } from "../services/jwt.service.js";
+import { generateToken } from "../services/jwt.service.js";
 import {
   decryptPassword,
   encryptPassword,
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
     .then((user) =>
       res.status(201).json({
         ...getUserWithoutPassword(user),
-        ...getToken(user),
+        ...generateToken(user),
       })
     )
     .catch((err) => {
@@ -37,7 +37,7 @@ export const login = async (req, res) => {
 
       res.status(200).json({
         ...getUserWithoutPassword(user),
-        ...getToken(user),
+        ...generateToken(user),
       });
     })
     .catch((err) => res.status(404).json({ message: "User not found" }));
