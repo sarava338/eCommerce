@@ -21,3 +21,4 @@ export const updateUserById = async (id, user) =>
   await UserModel.findByIdAndUpdate(id, user, { new: true });
 export const deleteUserById = async (id) =>
   await UserModel.findByIdAndDelete(id);
+export const findAllUsers = async () => await UserModel.find();
