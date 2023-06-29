@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 import { config } from "./app.config.js";
 
+import adminRouter from "./routes/admin.route.js"
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import productRouter from "./routes/product.route.js";
@@ -32,6 +33,7 @@ const startServer = () => {
 
   /** Routes */
   app.use(config.apiBasePath, [
+    adminRouter,
     authRouter,
     userRouter,
     productRouter,
