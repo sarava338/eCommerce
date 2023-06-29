@@ -1,6 +1,6 @@
 import express from "express";
 import adminUserRouter from "./adminRoutes/admin.user.route.js";
-import { verifyTokenAndAdmin } from "../middleware/jwt.middleware.js";
+import { verifyTokenAndAdmin } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
