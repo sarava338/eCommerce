@@ -2,18 +2,13 @@ import jwt from "jsonwebtoken";
 import { config } from "../app.config.js";
 
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers;
-
-  if (!authHeader.token)
-    return res.status(400).json({ message: "no token" });
-
-  const token = authHeader.token.split(" ")[1];
-
-  jwt.verify(token, config.jwtSecret, (err, user) => {
-    req.user = user;
-    if (err) return res.status(403).json({ message: "Token not valid", err });
-  });
-
+  if (req?.headers?.token?.startsWith("Bearer")) {
+    const token = req.headers.token.split(" ")[1];
+    jwt.verify(token, config.jwtSecret, (err, user) => {
+      req.user = user;
+      if (err) return res.status(403).json({ message: "Token not valid", err });
+    });
+  } else return res.status(400).json({ message: "No token" });
   next();
 };
 
