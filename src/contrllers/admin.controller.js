@@ -1,3 +1,7 @@
+import {
+  getAllUsersWithoutPasswords,
+  getUserWithoutPassword,
+} from "../helpers/user.help.js";
 import { findAllUsers, findUserById, updateUserById } from "../models/User.js";
 
 export const getUser = (req, res) => {
@@ -5,16 +9,16 @@ export const getUser = (req, res) => {
     .then((user) => {
       if (user === null || user === {})
         return res.status(404).json({ message: "User not found" });
-      else return res.status(200).json(user);
+      else return res.status(200).json(getUserWithoutPassword(user));
     })
     .catch((err) => res.status(500).json(err));
 };
 
 export const getAllUsers = (req, res) => {
   findAllUsers()
-    .then((users) => res.status(200).json(users))
+    .then((users) => res.status(200).json(getAllUsersWithoutPasswords(users)))
     .catch((err) => res.status(500).json(err));
-};
+}
 
 export const blockUser = (req, res) => {
   updateUserById(req.params.id, { $set: { isBlocked: true } }, { new: true })

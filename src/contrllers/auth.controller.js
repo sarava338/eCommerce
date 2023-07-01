@@ -4,7 +4,7 @@ import {
   decryptPassword,
   encryptPassword,
 } from "../services/crypto.service.js";
-import { getUserWithoutPassword } from "../helpers/user.help.js";
+import { getUserDetails } from "../helpers/user.help.js";
 
 /** Register */
 export const register = async (req, res) => {
@@ -17,7 +17,7 @@ export const register = async (req, res) => {
   })
     .then((user) =>
       res.status(201).json({
-        ...getUserWithoutPassword(user),
+        ...getUserDetails(user),
         ...generateToken(user),
       })
     )
@@ -36,9 +36,9 @@ export const login = async (req, res) => {
         return res.status(403).json({ message: "Forbidden credential" });
 
       res.status(200).json({
-        ...getUserWithoutPassword(user),
+        ...getUserDetails(user),
         ...generateToken(user),
       });
     })
-    .catch((err) => res.status(404).json({ message: "User not found" }));
+    .catch((err) => res.status(404).json({ message: "User not found", err }));
 };

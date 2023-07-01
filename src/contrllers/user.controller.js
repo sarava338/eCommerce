@@ -1,10 +1,10 @@
 import { deleteUserById, updateUserById } from "../models/User.js";
-import { getUserWithoutPassword } from "../helpers/user.help.js";
+import { getUserDetails } from "../helpers/user.help.js";
 
 export const updateUser = (req, res) => {
   updateUserById(req.params.id, { $set: req.body })
     .then((user) => {
-      res.status(200).json(getUserWithoutPassword(user));
+      res.status(200).json(getUserDetails(user));
     })
     .catch((err) => res.status(409).json(err));
 };
