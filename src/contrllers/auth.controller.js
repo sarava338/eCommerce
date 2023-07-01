@@ -1,10 +1,10 @@
 import { createUser, findUserByEmail } from "../models/User.js";
+import { getUserDetails } from "../helpers/user.helper.js";
 import { generateToken } from "../services/jwt.service.js";
 import {
   decryptPassword,
   encryptPassword,
 } from "../services/crypto.service.js";
-import { getUserDetails } from "../helpers/user.help.js";
 
 /** Register */
 export const register = async (req, res) => {

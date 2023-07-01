@@ -1,7 +1,7 @@
 import {
   getAllUsersWithoutPasswords,
   getUserWithoutPassword,
-} from "../helpers/user.help.js";
+} from "../helpers/user.helper.js";
 import { findAllUsers, findUserById, updateUserById } from "../models/User.js";
 
 export const getUser = (req, res) => {

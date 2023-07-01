@@ -1,5 +1,5 @@
 import { deleteUserById, updateUserById } from "../models/User.js";
-import { getUserDetails } from "../helpers/user.help.js";
+import { getUserDetails } from "../helpers/user.helper.js";
 
 export const updateUser = (req, res) => {
   updateUserById(req.params.id, { $set: req.body })
