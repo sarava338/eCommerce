@@ -10,5 +10,5 @@ export const generateToken = (user) => {
     config.jwtSecret,
     { expiresIn: "3d" }
   );
-  return { token };
+  return token;
 };

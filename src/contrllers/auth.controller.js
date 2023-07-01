@@ -5,6 +5,7 @@ import {
   decryptPassword,
   encryptPassword,
 } from "../services/crypto.service.js";
+import { THREE_DAYS } from "../utils/constants.js";
 
 /** Register */
 export const register = async (req, res) => {
@@ -15,12 +16,19 @@ export const register = async (req, res) => {
     password: encryptPassword(req.body.password),
     role: req.body.role,
   })
-    .then((user) =>
-      res.status(201).json({
+    .then((user) => {
+      const token = generateToken(user);
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: THREE_DAYS,
+      });
+
+      return res.status(201).json({
         ...getUserDetails(user),
-        ...generateToken(user),
-      })
-    )
+      });
+    })
     .catch((err) => {
       if (err.code == 11000 /** Dublicate resource code */)
         return res.status(403).json({ message: "User already exists" });
@@ -35,9 +43,16 @@ export const login = async (req, res) => {
       if (req.body.password !== decryptPassword(user.password))
         return res.status(403).json({ message: "Forbidden credential" });
 
-      res.status(200).json({
+      const token = generateToken(user);
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: THREE_DAYS,
+      });
+
+      return res.status(200).json({
         ...getUserDetails(user),
-        ...generateToken(user),
       });
     })
     .catch((err) => res.status(404).json({ message: "User not found", err }));
