@@ -57,3 +57,13 @@ export const login = async (req, res) => {
     })
     .catch((err) => res.status(404).json({ message: "User not found", err }));
 };
+
+/** Logout */
+export const logout = async (req, res) => {
+  findUserByEmail({ email: req.body.email })
+    .then(user=> {
+        res.clearCookie("token", {httpOnly: true, secure: true})
+        return res.status(204).json({message: "User logged out successfully"})
+    })
+    .catch(err=> res.status(404).json({message:"User not found", err}))
+}
