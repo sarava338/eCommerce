@@ -25,7 +25,7 @@ export const verifyTokenAndAdmin = (req, res, next) => {
 
 export const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id) next();
+    if (req.user.id === req.params.id || req.user.role === "ADMIN") next();
     else return res.status(401).json({ message: "Unauthorized user" });
   });
 };
