@@ -1,5 +1,5 @@
 {
-  "name": "sara-cart",
+  "name": "eCommerce",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sarava338/sara-cart.git"
+    "url": "git+https://github.com/sarava338/eCommerce.git"
   },
   "author": "sarava338",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sarava338/sara-cart/issues"
+    "url": "https://github.com/sarava338/eCommerce/issues"
   },
-  "homepage": "https://github.com/sarava338/sara-cart#readme",
+  "homepage": "https://github.com/sarava338/eCommerce#readme",
   "dependencies": {
     "chalk": "^5.2.0",
     "crypto-js": "^4.1.1",
