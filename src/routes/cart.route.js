@@ -5,12 +5,16 @@ import {
   postCart,
   updateCart,
 } from "../contrllers/cart.controller.js";
+import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
+import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.post("/cart", postCart);
-router.get("/cart/:id", getCart);
-router.put("/cart/:id", updateCart);
-router.delete("/cart/:id", deleteCart);
+router
+  .route("/cart/:id")
+  .get(mongoDbIdValidator, verifyTokenAndAuthorization, getCart)
+  .put(mongoDbIdValidator, verifyTokenAndAuthorization, updateCart)
+  .delete(mongoDbIdValidator, verifyTokenAndAuthorization, deleteCart)
 
 export default router;
