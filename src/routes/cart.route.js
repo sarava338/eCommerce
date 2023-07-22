@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteCart,
+  getAllCarts,
   getCart,
   postCart,
   updateCart,
@@ -10,7 +11,10 @@ import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/cart", postCart);
+router
+  .route("/cart")
+  .post(verifyTokenAndAuthorization, postCart)
+  .get(verifyTokenAndAuthorization, getAllCarts);
 router
   .route("/cart/:id")
   .get(mongoDbIdValidator, verifyTokenAndAuthorization, getCart)
