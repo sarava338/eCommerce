@@ -1,6 +1,7 @@
 import {
   createProduct,
   deleteProductById,
+  findAllProducts,
   findProductById,
   updateProductById,
 } from "../models/Product.js";
@@ -10,6 +11,12 @@ export const postProduct = (req, res) => {
     .then((product) => res.status(201).json(product))
     .catch((err) => res.status(500).json(err));
 };
+
+export const getAllProducts = (req, res) => {
+  findAllProducts()
+    .then((products)=> res.status(200).json(products))
+    .catch((err)=> res.json(err))
+}
 
 export const getProduct = (req, res) => {
   findProductById(req.params.id)

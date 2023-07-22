@@ -18,6 +18,7 @@ export default ProductModel;
 
 export const createProduct = async (product) =>
   await new ProductModel(product).save();
+export const findAllProducts = async () => await ProductModel.find();
 export const findProductById = async (id) => await ProductModel.findById(id);
 export const updateProductById = async (id, product) =>
   await ProductModel.findByIdAndUpdate(id, product);
