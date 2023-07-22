@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteOrder,
+  getAllOrders,
   getOrder,
   postOrder,
   updateOrder,
@@ -10,7 +11,10 @@ import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/order", postOrder);
+router
+  .route("/order")
+  .post(verifyTokenAndAuthorization, postOrder)
+  .get(verifyTokenAndAuthorization, getAllOrders);
 router
   .route("/order/:id")
   .get(mongoDbIdValidator, verifyTokenAndAuthorization, getOrder)

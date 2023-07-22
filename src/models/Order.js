@@ -17,6 +17,7 @@ const OrderModel = mongoose.model("Order", OrderSchema);
 export default OrderModel;
 
 export const createOrder = async (order) => await new OrderModel(order).save();
+export const findAllOrders =  async () => await OrderModel.find();
 export const findOrderById = async (id) => await OrderModel.findById(id);
 export const updateOrderById = async (id) =>
   await OrderModel.findByIdAndUpdate(id);

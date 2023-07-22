@@ -1,6 +1,7 @@
 import {
   createOrder,
   deleteOrderById,
+  findAllOrders,
   findOrderById,
   updateOrderById,
 } from "../models/Order.js";
@@ -8,6 +9,12 @@ import {
 export const postOrder = (req, res) => {
   createOrder(req.body)
     .then((order) => res.status(201).json(order))
+    .catch((err) => res.json(err));
+};
+
+export const getAllOrders = (req, res) => {
+  findAllOrders()
+    .then((orders) => res.status(200).json(orders))
     .catch((err) => res.json(err));
 };
 
