@@ -9,14 +9,14 @@ import {
 export const postProduct = (req, res) => {
   createProduct(req.body)
     .then((product) => res.status(201).json(product))
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => res.json(err));
 };
 
 export const getAllProducts = (req, res) => {
   findAllProducts()
-    .then((products)=> res.status(200).json(products))
-    .catch((err)=> res.json(err))
-}
+    .then((products) => res.status(200).json(products))
+    .catch((err) => res.json(err));
+};
 
 export const getProduct = (req, res) => {
   findProductById(req.params.id)
@@ -33,7 +33,7 @@ export const getProduct = (req, res) => {
 export const updateProduct = (req, res) => {
   updateProductById(req.params.id, { $set: req.body })
     .then((product) => res.status(200).json(product))
-    .catch((err) => res.status(409).json(err));
+    .catch((err) => res.json(err));
 };
 
 export const deleteProduct = (req, res) => {
@@ -45,5 +45,5 @@ export const deleteProduct = (req, res) => {
         .status(202)
         .json({ success: true, message: "product deleted", product });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => res.json(err));
 };

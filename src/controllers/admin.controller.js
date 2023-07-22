@@ -11,14 +11,14 @@ export const getUser = (req, res) => {
         return res.status(404).json({ message: "User not found" });
       else return res.status(200).json(getUserWithoutPassword(user));
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => res.json(err));
 };
 
 export const getAllUsers = (req, res) => {
   findAllUsers()
     .then((users) => res.status(200).json(getAllUsersWithoutPasswords(users)))
-    .catch((err) => res.status(500).json(err));
-}
+    .catch((err) => res.json(err));
+};
 
 export const blockUser = (req, res) => {
   updateUserById(req.params.id, { $set: { isBlocked: true } }, { new: true })
@@ -28,7 +28,7 @@ export const blockUser = (req, res) => {
         blocked: user.isBlocked,
       })
     )
-    .catch((err) => res.status().json({ message: "User not blocked", err }));
+    .catch((err) => res.json(err));
 };
 
 export const unBlockUser = (req, res) => {
@@ -39,5 +39,5 @@ export const unBlockUser = (req, res) => {
         blocked: user.isBlocked,
       })
     )
-    .catch((err) => res.status().json({ message: "User not unblocked", err }));
+    .catch((err) => res.json(err));
 };

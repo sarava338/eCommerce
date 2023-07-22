@@ -32,7 +32,7 @@ export const register = async (req, res) => {
     .catch((err) => {
       if (err.code == 11000 /** Dublicate resource code */)
         return res.status(403).json({ message: "User already exists" });
-      return res.status(500).json(err);
+      return res.json(err);
     });
 };
 
@@ -55,15 +55,15 @@ export const login = async (req, res) => {
         ...getUserDetails(user),
       });
     })
-    .catch((err) => res.status(404).json({ message: "User not found", err }));
+    .catch((err) => res.json(err));
 };
 
 /** Logout */
 export const logout = async (req, res) => {
   findUserByEmail({ email: req.body.email })
-    .then(user=> {
-        res.clearCookie("token", {httpOnly: true, secure: true})
-        return res.status(204).json({message: "User logged out successfully"})
+    .then((user) => {
+      res.clearCookie("token", { httpOnly: true, secure: true });
+      return res.status(204).json({ message: "User logged out successfully" });
     })
-    .catch(err=> res.status(404).json({message:"User not found", err}))
+    .catch((err) => res.json(err));
 }
