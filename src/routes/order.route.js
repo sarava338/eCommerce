@@ -4,7 +4,7 @@ import {
   getOrder,
   postOrder,
   updateOrder,
-} from "../contrllers/order.controller.js";
+} from "../controllers/order.controller.js";
 import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
 import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
 

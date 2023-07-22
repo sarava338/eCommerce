@@ -4,7 +4,7 @@ import {
   getCart,
   postCart,
   updateCart,
-} from "../contrllers/cart.controller.js";
+} from "../controllers/cart.controller.js";
 import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
 import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
 

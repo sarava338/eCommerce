@@ -4,13 +4,13 @@ import {
   getProduct,
   postProduct,
   updateProduct,
-} from "../contrllers/product.controller.js";
+} from "../controllers/product.controller.js";
 import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
 import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/product", postProduct);
+router.route("/product").post(postProduct);
 router
   .route("/product/:id")
   .get(mongoDbIdValidator, verifyTokenAndAuthorization, getProduct)
