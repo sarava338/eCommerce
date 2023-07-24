@@ -16,7 +16,6 @@ const CartSchema = new mongoose.Schema(
 );
 
 const CartModel = mongoose.model("Cart", CartSchema);
-export default CartModel;
 
 export const createCart = async (cart) => await new CartModel(cart).save();
 export const findAllCarts = async () => await CartModel.find();

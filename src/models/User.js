@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema(
 );
 
 const UserModel = mongoose.model("User", UserSchema);
-export default UserModel;
 
 export const createUser = async (user) => await new UserModel(user).save();
 export const findUserByEmail = async (email) => await UserModel.findOne(email);

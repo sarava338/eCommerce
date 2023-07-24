@@ -14,7 +14,6 @@ const ProductSchema = new mongoose.Schema(
 );
 
 const ProductModel = mongoose.model("Product", ProductSchema);
-export default ProductModel;
 
 export const createProduct = async (product) =>
   await new ProductModel(product).save();

@@ -14,7 +14,6 @@ const OrderSchema = new mongoose.Schema(
 );
 
 const OrderModel = mongoose.model("Order", OrderSchema);
-export default OrderModel;
 
 export const createOrder = async (order) => await new OrderModel(order).save();
 export const findAllOrders =  async () => await OrderModel.find();
