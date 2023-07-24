@@ -9,7 +9,11 @@ import {
 export const postOrder = (req, res) => {
   createOrder(req.body)
     .then((order) => res.status(201).json(order))
-    .catch((err) => res.json(err));
+    .catch((err) => {
+      if (err.code === 11000)
+        res.status(409).json({ message: "Order already exists", err });
+      else res.status(500).json(err);
+    });
 };
 
 export const getAllOrders = (req, res) => {

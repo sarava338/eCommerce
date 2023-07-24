@@ -24,7 +24,11 @@ export const getCart = (req, res) => {
       if (!cart) return res.status(404).json({ message: "cart not found" });
       res.status(200).json(cart);
     })
-    .catch((err) => res.json(err));
+    .catch((err) => {
+      if (err.code === 11000)
+        res.status(409).json({ message: "Cart already exists", err });
+      else res.status(500).json(err);
+    });
 };
 
 export const updateCart = (req, res) => {

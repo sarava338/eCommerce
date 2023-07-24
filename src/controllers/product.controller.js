@@ -9,7 +9,11 @@ import {
 export const postProduct = (req, res) => {
   createProduct(req.body)
     .then((product) => res.status(201).json(product))
-    .catch((err) => res.json(err));
+    .catch((err) => {
+      if (err.code === 11000)
+        res.status(409).json({ message: "Product already exists", err });
+      else res.status(500).json(err);
+    });
 };
 
 export const getAllProducts = (req, res) => {
