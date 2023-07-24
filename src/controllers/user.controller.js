@@ -2,7 +2,7 @@ import { deleteUserById, updateUserById } from "../models/User.js";
 import { getUserDetails } from "../helpers/user.helper.js";
 
 export const updateUser = (req, res) => {
-  updateUserById(req.params.id, { $set: req.body })
+  updateUserById(req.params.id, req.body)
     .then((user) => {
       res.status(200).json(getUserDetails(user));
     })

@@ -28,7 +28,7 @@ export const getOrder = (req, res) => {
 };
 
 export const updateOrder = (req, res) => {
-  updateOrderById(req.params.id, { $set: req.body })
+  updateOrderById(req.params.id, req.body)
     .then((order) => res.status(200).json(order))
     .catch((err) => res.json(err));
 };

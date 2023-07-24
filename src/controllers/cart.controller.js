@@ -28,7 +28,7 @@ export const getCart = (req, res) => {
 };
 
 export const updateCart = (req, res) => {
-  updateCartById(req.params.id, { $set: req.body })
+  updateCartById(req.params.id, req.body)
     .then((cart) => res.status(200).json(cart))
     .catch((err) => res.json(err));
 };

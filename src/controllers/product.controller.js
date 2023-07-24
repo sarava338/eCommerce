@@ -31,7 +31,7 @@ export const getProduct = (req, res) => {
 };
 
 export const updateProduct = (req, res) => {
-  updateProductById(req.params.id, { $set: req.body })
+  updateProductById(req.params.id, req.body)
     .then((product) => res.status(200).json(product))
     .catch((err) => res.json(err));
 };

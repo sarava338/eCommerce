@@ -21,8 +21,8 @@ export default CartModel;
 export const createCart = async (cart) => await new CartModel(cart).save();
 export const findAllCarts = async () => await CartModel.find();
 export const findCartById = async (id) => await CartModel.findById(id);
-export const updateCartById = async (id) =>
-  await CartModel.findByIdAndUpdate(id);
+export const updateCartById = async (id, updatedCartData) =>
+  await CartModel.findByIdAndUpdate(id, { $set: updatedCartData });
 export const deleteCartById = async (id) =>
   await CartModel.findByIdAndDelete(id);
 export const deleteManyCarts = async (condition) =>

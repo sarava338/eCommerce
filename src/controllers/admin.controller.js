@@ -21,7 +21,7 @@ export const getAllUsers = (req, res) => {
 };
 
 export const blockUser = (req, res) => {
-  updateUserById(req.params.id, { $set: { isBlocked: true } }, { new: true })
+  updateUserById(req.params.id, { isBlocked: true })
     .then((user) =>
       res.status(200).json({
         message: "User blocked successfully",
@@ -32,7 +32,7 @@ export const blockUser = (req, res) => {
 };
 
 export const unBlockUser = (req, res) => {
-  updateUserById(req.params.id, { $set: { isBlocked: false } }, { new: true })
+  updateUserById(req.params.id, { isBlocked: false })
     .then((user) =>
       res.status(200).json({
         message: "User unblocked successfully",
