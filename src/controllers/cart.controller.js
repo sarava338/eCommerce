@@ -42,7 +42,7 @@ export const deleteCart = (req, res) => {
     .then((cart) => {
       if (!cart)
         return res.status(404).json({ message: "cart not found to delete" });
-      res.status(202).json({ success: true, message: "cart deleted", cart });
+      res.status(202).json({ message: "cart deleted" });
     })
     .catch((err) => res.json(err));
 };

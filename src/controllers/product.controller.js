@@ -45,9 +45,7 @@ export const deleteProduct = (req, res) => {
     .then((product) => {
       if (!product)
         return res.status(404).json({ message: "product not found to delete" });
-      res
-        .status(202)
-        .json({ success: true, message: "product deleted", product });
+      res.status(202).json({ message: "product deleted" });
     })
     .catch((err) => res.json(err));
 };

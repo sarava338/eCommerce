@@ -11,6 +11,6 @@ export const updateUser = (req, res) => {
 
 export const deleteUser = (req, res) => {
   deleteUserById(req.params.id)
-    .then((ans) => res.status(204).json(ans))
+    .then((user) => res.status(202).json({ message: "User deleted" }))
     .catch((err) => res.json(err));
 };

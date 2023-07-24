@@ -42,9 +42,7 @@ export const deleteOrder = (req, res) => {
     .then((order) => {
       if (!order)
         return res.status(404).json({ message: "order not found to delete" });
-      res
-        .status(202)
-        .json({ success: true, message: "order deleted", order });
+      res.status(202).json({ message: "order deleted" });
     })
     .catch((err) => res.json(err));
 };
