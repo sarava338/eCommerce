@@ -16,7 +16,11 @@ export const getUser = (req, res) => {
 
 export const getAllUsers = (req, res) => {
   findAllUsers()
-    .then((users) => res.status(200).json(getAllUsersWithoutPasswords(users)))
+    .then((users) => {
+      if (users.length === 0)
+        res.status(404).json({ message: "No user found" });
+      else res.status(200).json(getAllUsersWithoutPasswords(users));
+    })
     .catch((err) => res.json(err));
 };
 

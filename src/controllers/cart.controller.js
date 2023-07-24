@@ -14,7 +14,11 @@ export const postCart = (req, res) => {
 
 export const getAllCarts = (req, res) => {
   findAllCarts()
-    .then((carts) => res.status(200).json(carts))
+    .then((carts) => {
+      if (carts.length === 0)
+        res.status(404).json({ message: "No cart found" });
+      else res.status(200).json(carts);
+    })
     .catch((err) => res.json(err));
 };
 

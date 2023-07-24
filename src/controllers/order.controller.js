@@ -18,7 +18,11 @@ export const postOrder = (req, res) => {
 
 export const getAllOrders = (req, res) => {
   findAllOrders()
-    .then((orders) => res.status(200).json(orders))
+    .then((orders) => {
+      if (orders.length === 0)
+        res.status(404).json({ message: "No order found" });
+      else res.status(200).json(orders);
+    })
     .catch((err) => res.json(err));
 };
 

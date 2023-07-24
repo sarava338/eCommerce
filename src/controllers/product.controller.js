@@ -18,7 +18,11 @@ export const postProduct = (req, res) => {
 
 export const getAllProducts = (req, res) => {
   findAllProducts()
-    .then((products) => res.status(200).json(products))
+    .then((products) => {
+      if (products.length === 0)
+        res.status(404).json({ message: "No product found" });
+      else res.status(200).json(products);
+    })
     .catch((err) => res.json(err));
 };
 
