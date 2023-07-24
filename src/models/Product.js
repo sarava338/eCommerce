@@ -20,7 +20,11 @@ export const createProduct = async (product) =>
 export const findAllProducts = async () => await ProductModel.find();
 export const findProductById = async (id) => await ProductModel.findById(id);
 export const updateProductById = async (id, updatedProductData) =>
-  await ProductModel.findByIdAndUpdate(id, { $set: updatedProductData });
+  await ProductModel.findByIdAndUpdate(
+    id,
+    { $set: updatedProductData },
+    { new: true }
+  );
 export const deleteProductById = async (id) =>
   await ProductModel.findByIdAndDelete(id);
 export const deleteManyProducts = async (condition) =>
