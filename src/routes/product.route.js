@@ -1,7 +1,7 @@
 import express from "express";
 import {
-  getAllProducts,
   getProduct,
+  getAllProducts,
 } from "../controllers/product.controller.js";
 import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
 import { verifyTokenAndAuthorization } from "../middleware/auth.middleware.js";
