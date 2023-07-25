@@ -59,7 +59,6 @@ export const deleteProduct = (req, res) => {
 export const filterProducts = (req, res) => {
   const { sort, limit, page, fields, ...query } = req?.query;
 
-  // SENDING Query to DB
   findProductsByFilter(getFilteredQuery(query))
     .then((filteredProducts) => {
       if (filteredProducts.length === 0)
