@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema(
     description: { type: String, required: true },
     img: { type: String },
     price: { type: Number, required: true },
-    categories: { type: Array },
+    category: { type: Array },
     size: { type: String },
     color: { type: String },
   },
@@ -29,3 +29,19 @@ export const deleteProductById = async (id) =>
   await ProductModel.findByIdAndDelete(id);
 export const deleteManyProducts = async (condition) =>
   await ProductModel.deleteMany(condition);
+export const getProductsByFilters = async ({
+  minPrice,
+  maxPrice,
+  catagory,
+  brand,
+  color,
+}) =>
+  await ProductModel.find({
+    price: {
+      $gte: minPrice,
+      $lte: maxPrice,
+    },
+    catagory,
+    brand,
+    color,
+  });
