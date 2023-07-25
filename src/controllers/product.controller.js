@@ -57,11 +57,7 @@ export const deleteProduct = (req, res) => {
 };
 
 export const filterProducts = (req, res) => {
-  const query = { ...req?.query };
-
-  // fields need to be excluded from query
-  const excludedFields = ["sort", "limit", "page", "fields"];
-  excludedFields.forEach((field) => delete query[field]);
+  const { sort, limit, page, fields, ...query } = req?.query;
 
   // SENDING Query to DB
   findProductsByFilter(getFilteredQuery(query))
