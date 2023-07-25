@@ -1,11 +1,11 @@
-import { express } from "express";
+import express from "express";
 import {
   deleteProduct,
   getAllProducts,
   postProduct,
   updateProduct,
-} from "../../controllers/product.controller";
-import { mongoDbIdValidator } from "../../middleware/mongoose.middleware";
+} from "../../controllers/product.controller.js";
+import { mongoDbIdValidator } from "../../middleware/mongoose.middleware.js";
 
 const router = express.Router();
 
