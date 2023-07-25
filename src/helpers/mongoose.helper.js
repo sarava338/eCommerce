@@ -1,4 +1,4 @@
-//gte & lte need to be matched
+//gte || gt & lte || lt need to be matched to $gte & $lte
 export const getFilteredQuery = (query) => {
   let filterQuery = JSON.stringify(query);
   filterQuery = filterQuery.replace(
