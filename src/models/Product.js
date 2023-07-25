@@ -29,3 +29,5 @@ export const deleteProductById = async (id) =>
   await ProductModel.findByIdAndDelete(id);
 export const deleteManyProducts = async (condition) =>
   await ProductModel.deleteMany(condition);
+export const findProductsByFilter = async (filters) =>
+  await ProductModel.find(filters);
