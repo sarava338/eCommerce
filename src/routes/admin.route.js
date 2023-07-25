@@ -1,5 +1,6 @@
 import express from "express";
 import adminUserRouter from "./adminRoutes/user.adminRoute.js";
+import adminProductRouter from "./adminRoutes/product.adminRoute.js";
 import { verifyTokenAndAdmin } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -9,6 +10,9 @@ router.get("/admin", verifyTokenAndAdmin, (req, res) => {
   res.status(200).send("hello admin");
 });
 
-router.use("/admin", verifyTokenAndAdmin, [adminUserRouter]);
+router.use("/admin", verifyTokenAndAdmin, [
+  adminUserRouter,
+  adminProductRouter,
+]);
 
 export default router;
