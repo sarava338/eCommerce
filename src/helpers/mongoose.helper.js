@@ -7,3 +7,6 @@ export const getFilteredQuery = (query) => {
   );
   return JSON.parse(filterQuery);
 };
+
+export const getSortBy = (sort) =>
+  sort ? sort.replace(",", " ") : "-createdAt";

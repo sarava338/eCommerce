@@ -17,7 +17,8 @@ const ProductModel = mongoose.model("Product", ProductSchema);
 
 export const createProduct = async (product) =>
   await new ProductModel(product).save();
-export const findAllProducts = async (query) => await ProductModel.find(query);
+export const findAllProducts = async (query, sort) =>
+  await ProductModel.find(query).sort(sort);
 export const findProductById = async (id) => await ProductModel.findById(id);
 export const updateProductById = async (id, updatedProductData) =>
   await ProductModel.findByIdAndUpdate(
