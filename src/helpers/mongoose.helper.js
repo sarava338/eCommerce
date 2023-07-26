@@ -8,5 +8,6 @@ export const getFilteredQuery = (query) => {
   return JSON.parse(filterQuery);
 };
 
+//to sort the data from mongoose
 export const getSortBy = (sort) =>
   sort ? sort.replace(",", " ") : "-createdAt";
