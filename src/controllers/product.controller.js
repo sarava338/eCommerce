@@ -3,7 +3,6 @@ import {
   deleteProductById,
   findAllProducts,
   findProductById,
-  findProductsByFilter,
   updateProductById,
 } from "../models/Product.js";
 import { getFilteredQuery } from "../helpers/mongoose.helper.js";
@@ -19,7 +18,11 @@ export const postProduct = (req, res) => {
 };
 
 export const getAllProducts = (req, res) => {
-  findAllProducts()
+  let { sort, limit, page, fields, ...query } = req?.query;
+
+  query = getFilteredQuery(query)
+  
+  findAllProducts(query)
     .then((products) => {
       if (products.length === 0)
         res.status(404).json({ message: "No product found" });
@@ -54,16 +57,4 @@ export const deleteProduct = (req, res) => {
       res.status(202).json({ message: "product deleted" });
     })
     .catch((err) => res.json(err));
-};
-
-export const filterProducts = (req, res) => {
-  const { sort, limit, page, fields, ...query } = req?.query;
-
-  findProductsByFilter(getFilteredQuery(query))
-    .then((filteredProducts) => {
-      if (filteredProducts.length === 0)
-        return res.status(404).json({ message: "No such product found" });
-      res.status(200).json(filteredProducts);
-    })
-    .catch((err) => res.status(500).json(err));
 };

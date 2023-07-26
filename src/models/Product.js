@@ -17,7 +17,7 @@ const ProductModel = mongoose.model("Product", ProductSchema);
 
 export const createProduct = async (product) =>
   await new ProductModel(product).save();
-export const findAllProducts = async () => await ProductModel.find();
+export const findAllProducts = async (query) => await ProductModel.find(query);
 export const findProductById = async (id) => await ProductModel.findById(id);
 export const updateProductById = async (id, updatedProductData) =>
   await ProductModel.findByIdAndUpdate(
@@ -29,5 +29,3 @@ export const deleteProductById = async (id) =>
   await ProductModel.findByIdAndDelete(id);
 export const deleteManyProducts = async (condition) =>
   await ProductModel.deleteMany(condition);
-export const findProductsByFilter = async (filters) =>
-  await ProductModel.find(filters);
