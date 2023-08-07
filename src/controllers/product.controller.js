@@ -5,7 +5,11 @@ import {
   findProductById,
   updateProductById,
 } from "../models/Product.js";
-import { getFilteredQuery, getSortBy } from "../helpers/mongoose.helper.js";
+import {
+  getFieldsBy,
+  getFilteredQuery,
+  getSortBy,
+} from "../helpers/mongoose.helper.js";
 
 export const postProduct = (req, res) => {
   createProduct(req.body)
@@ -22,8 +26,9 @@ export const getAllProducts = (req, res) => {
 
   query = getFilteredQuery(query)
   sort = getSortBy(sort)
+  fields = getFieldsBy(fields);
   
-  findAllProducts(query, sort)
+  findAllProducts(query, sort, fields)
     .then((products) => {
       if (products.length === 0)
         res.status(404).json({ message: "No product found" });

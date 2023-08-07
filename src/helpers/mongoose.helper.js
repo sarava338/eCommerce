@@ -11,3 +11,6 @@ export const getFilteredQuery = (query) => {
 //to sort the data from mongoose
 export const getSortBy = (sort) =>
   sort ? sort.replace(",", " ") : "-createdAt";
+
+export const getFieldsBy = (fields) =>
+  fields ? fields.replace(",", " ") : "-__v";
