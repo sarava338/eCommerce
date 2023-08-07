@@ -12,5 +12,6 @@ export const getFilteredQuery = (query) => {
 export const getSortBy = (sort) =>
   sort ? sort.replace(",", " ") : "-createdAt";
 
+//to select the fields
 export const getFieldsBy = (fields) =>
   fields ? fields.replace(",", " ") : "-__v";
