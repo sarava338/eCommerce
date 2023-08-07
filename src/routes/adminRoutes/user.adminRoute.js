@@ -4,7 +4,7 @@ import {
   getAllUsers,
   getUser,
   unBlockUser,
-} from "../../controllers/admin.controller.js";
+} from "../../controllers/user.controller.js";
 import { mongoDbIdValidator } from "../../middleware/mongoose.middleware.js";
 
 const router = express.Router();
