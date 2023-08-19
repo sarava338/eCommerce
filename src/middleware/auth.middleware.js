@@ -23,7 +23,7 @@ export const verifyTokenAndAdmin = (req, res, next) => {
   });
 };
 
-export const verifyTokenAndAuthorization = (req, res, next) => {
+export const verifyTokenAndUser = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.role === "USER") next();
     else return res.status(401).json({ message: "Unauthorized user" });
