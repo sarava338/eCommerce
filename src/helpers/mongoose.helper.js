@@ -15,3 +15,6 @@ export const getSortBy = (sort) =>
 //to select the fields
 export const getFieldsBy = (fields) =>
   fields ? fields.replace(",", " ") : "-__v";
+
+//Pagination
+export const getSkip = (page, limit=10) => (page - 1) * limit;
