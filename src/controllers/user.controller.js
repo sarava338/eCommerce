@@ -27,8 +27,7 @@ export const deleteUser = (req, res) => {
 export const getUser = (req, res) => {
   findUserById(req.params.id)
     .then((user) => {
-      if (user === null || user === {})
-        return res.status(404).json({ message: "User not found" });
+      if (!user) return res.status(404).json({ message: "User not found" });
       else return res.status(200).json(getUserWithoutPassword(user));
     })
     .catch((err) => res.json(err));
