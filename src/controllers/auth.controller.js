@@ -5,7 +5,7 @@ import {
   decryptPassword,
   encryptPassword,
 } from "../services/crypto.service.js";
-import { THREE_DAYS } from "../utils/constants.js";
+import constants from "../utils/constants.js";
 
 /** Register */
 export const register = async (req, res) => {
@@ -22,7 +22,7 @@ export const register = async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: true,
-        maxAge: THREE_DAYS,
+        maxAge: constants.THREE_DAYS,
       });
 
       return res.status(201).json({
@@ -48,7 +48,7 @@ export const login = async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: true,
-        maxAge: THREE_DAYS,
+        maxAge: constants.THREE_DAYS,
       });
 
       return res.status(200).json({
