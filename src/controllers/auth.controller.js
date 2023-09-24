@@ -74,6 +74,7 @@ export const logout = async (req, res) => {
     .catch((err) => res.json(err));
 };
 
+/** Change Password */
 export const updatePassword = async (req, res) => {
   const { id } = req.user;
   const { password, ...otherData } = req.body;
