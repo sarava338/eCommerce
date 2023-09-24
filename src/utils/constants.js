@@ -1,7 +1,8 @@
-const ONE_HOUR = 60 * 60 * 1000;
+const ONE_MIN = 60 * 1000;
+const ONE_HOUR = 60 * ONE_MIN;
 const ONE_DAY = 24 * ONE_HOUR;
 
 export default {
-  ONE_DAY: ONE_DAY,
-  THREE_DAYS: ONE_DAY * 3,
+  TEN_MINS: 10 * ONE_MIN,
+  THREE_DAYS: 3 * ONE_DAY,
 };

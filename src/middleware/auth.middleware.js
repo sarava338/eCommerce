@@ -3,11 +3,12 @@ import { config } from "../app.config.js";
 
 export const verifyToken = (req, res, next) => {
   if (
-    req?.cookies?.token ||
+    // req?.cookies?.token ||
     req?.headers?.authorization?.startsWith("Bearer")
   ) {
     const token =
-      req?.cookies?.token || req?.headers?.authorization?.split(" ")[1];
+      // req?.cookies?.token || 
+      req?.headers?.authorization?.split(" ")[1];
     jwt.verify(token, config.jwtSecret, (err, user) => {
       req.user = user;
       if (err) return res.status(403).json({ message: "Token not valid", err });
