@@ -77,7 +77,7 @@ export const logout = async (req, res) => {
 export const updatePassword = async (req, res) => {
   const { id } = req.user;
   const { password, ...otherData } = req.body;
-  changePasswordById(id, { password })
+  changePasswordById(id, { password: encryptPassword(password) })
     .then((user) => {
       res.status(200).json({
         message: "password updated successfully",
