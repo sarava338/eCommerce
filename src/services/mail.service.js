@@ -1,22 +1,26 @@
 import nodemailer from "nodemailer";
 import { config } from "../app.config.js";
 
-export const sendEmail = async (option) => {
+export const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
-    service: config.emailHost,
-    port: config.emailPort,
+    service: config.smktService,
+    port: config.smktPort,
     auth: {
-      user: config.emailUserName,
-      password: config.emailPassword,
+      type: "OAuth2",
+      user: config.gmailUserName,
+      clientId: config.gmailApiClientId,
+      clientSecret: config.gmailApiClientSecret,
+      accessToken: config.gmailApiAccessToken,
     },
   });
 
-  const emailOptions = {
-    from: "SaraCart Support<support@saracart.com>",
-    to: options.email,
+  const mailOptions = {
+    from: `Sara-Cart <${config.emailUserName}>`,
+    to: options.to,
     subject: options.subject,
-    text: options.message,
+    text: options.text,
+    html: options.html,
   };
 
-  await transporter.sendMail(emailOptions);
+  return await transporter.sendMail(mailOptions);
 };

@@ -7,10 +7,13 @@ import {
   createUser,
   findUserByEmail,
   changePasswordById,
+  updateUserById,
+  updateUserByEmail,
 } from "../models/User.js";
 import {
   decryptPassword,
   encryptPassword,
+  createPasswordResetToken,
 } from "../services/crypto.service.js";
 
 /** Register */
@@ -89,45 +92,59 @@ export const updatePassword = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  findUserByEmail({ email: req.body.email })
-    .then(async (user) => {
-      if (!user) return res.status(404).json({ message: "User not found" });
+  const { email, ...otherData } = req.body;
 
-      const resetToken = user.createResetPasswordToken();
-      await user.save({ validateBeforeSave: false });
+  const { passwordRandomString, passwordResetToken } =
+    createPasswordResetToken();
+  const passwordResetTokenExpires = Date.now() + constants.TEN_MINS;
 
-      const resetUrl = `${req.protocol}://${req.get("host")}${
-        config.apiBasePath
-      }/auth/reset-password/${resetToken}`;
+  const user = await updateUserByEmail(email, {
+    passwordResetToken,
+    passwordResetTokenExpires,
+  });
+  if (!user) return res.status(404).json({ message: "User not found" });
 
-      const message = `Hi ${user.firstName},
-      We have recieved a password reset request. To reset the password please click the below link
-      
-      link: ${resetUrl}
-      
+  const resetUrl = `http://localhost:8080/api/v1/auth/reset-password/${passwordRandomString}`;
+
+  const message = `<h1>Hi ${user.firstName},</h1><br/><br/>
+      We have recieved a password reset request. To reset the password please click the below link.
+      <br/><br/>
+      link: <a href="${resetUrl}">Click here</a>
+      <br/><br/>
+      If above like not worked, Please paste the below link in a browser
+      <br/><br/>
+      ${resetUrl}
+      <br/><br/>
       This password reset link will be valid only for next 10 mins
-      
-      
+      <br/><br/><br/><br/>
       By,
-      SaraCart.`;
+      SaraCart`;
 
-      try {
-        await sendEmail({
-          email: user.email,
-          subject: "SaraCart - Password change Request recieved",
-          message: message,
-        });
+  try {
+    const emailSentResponse = await sendEmail({
+      to: user.email,
+      text: `Hey ${user.firstName}`,
+      subject: "SaraCart - Password change Request recieved",
+      html: message,
+    });
 
-        res.status(200).json({
-          status: "success",
-          message: "password reset email has been sent",
-        });
-      } catch (error) {
-        user.passwordResetToken = undefined;
-        user.passwordResetTokenExpires = undefined;
-        await user.save({ validateBeforeSave: false });
-        res.json({ message: "not able to send password reset email", error });
-      }
-    })
-    .catch((error) => res.json({ message: "User Not found", error }));
+    res.status(200).json({
+      status: "success",
+      message: `password reset email has been sent : message - ${emailSentResponse.response}`,
+      token: passwordRandomString,
+    });
+  } catch (error) {
+    await updateUserByEmail(email, {
+      passwordResetToken: null,
+      passwordResetTokenExpires: null,
+    });
+    res.status(500).json({
+      message: `not able to send password reset email : error - ${error.message}`,
+      error,
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
 };
