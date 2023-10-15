@@ -1,4 +1,4 @@
-# [sarava338/eCommerce](https://github.com/sarava338/eCommerce)
+# sarava338/eCommerce
 
 ## To Install Dependies
 
