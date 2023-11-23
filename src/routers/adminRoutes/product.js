@@ -4,8 +4,8 @@ import {
   getAllProducts,
   postProduct,
   updateProduct,
-} from "../../controllers/product.controller.js";
-import { mongoDbIdValidator } from "../../middleware/mongoose.middleware.js";
+} from "../../controllers/product.js";
+import { mongoDbIdValidator } from "../../middleware/mongoose.js";
 
 const router = express.Router();
 

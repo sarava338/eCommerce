@@ -8,7 +8,7 @@ import {
   getUserDetails,
   getAllUsersWithoutPasswords,
   getUserWithoutPassword,
-} from "../helpers/user.helper.js";
+} from "../helpers/user.js";
 
 export const updateUser = (req, res) => {
   updateUserById(req.params.id, req.body)

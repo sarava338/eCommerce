@@ -1,18 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 
-import { config } from "./app.config.js";
+import { config } from "./config.js";
 
-import adminRouter from "./routes/admin.route.js"
-import authRouter from "./routes/auth.route.js";
-import userRouter from "./routes/user.route.js";
-import productRouter from "./routes/product.route.js";
-import cartRouter from "./routes/cart.route.js";
-import orderRouter from "./routes/order.route.js";
+import adminRouter from "./routers/admin.js";
+import authRouter from "./routers/auth.js";
+import userRouter from "./routers/user.js";
+import productRouter from "./routers/product.js";
+import cartRouter from "./routers/cart.js";
+import orderRouter from "./routers/order.js";
 import Log from "./libraries/Log.js";
-import {
-  logEveryRequest,
-} from "./middleware/log.middleware.js";
+import { logEveryRequest } from "./middleware/log.js";
 
 const app = express();
 

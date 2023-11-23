@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 import crypto from "crypto";
-import { config } from "../app.config.js";
+import { config } from "../config.js";
 
 export const encryptPassword = (password) =>
   CryptoJS.AES.encrypt(password, config.cryptoSycret).toString();

@@ -6,9 +6,9 @@ import {
   forgotPassword,
   resetPassword,
   updatePassword,
-} from "../controllers/auth.controller.js";
-import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
-import { verifyToken } from "../middleware/auth.middleware.js";
+} from "../controllers/auth.js";
+import { mongoDbIdValidator } from "../middleware/mongoose.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 

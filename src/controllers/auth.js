@@ -1,8 +1,8 @@
-import { config } from "../app.config.js";
+import { config } from "../config.js";
 import constants from "../utils/constants.js";
-import { sendEmail } from "../services/mail.service.js";
-import { getUserDetails } from "../helpers/user.helper.js";
-import { generateToken } from "../services/jwt.service.js";
+import { sendEmail } from "../services/mail.js";
+import { getUserDetails } from "../helpers/user.js";
+import { generateToken } from "../services/jwt.js";
 import {
   createUser,
   findUserByEmail,
@@ -14,7 +14,7 @@ import {
   decryptPassword,
   encryptPassword,
   createPasswordResetToken,
-} from "../services/crypto.service.js";
+} from "../services/crypto.js";
 
 /** Register */
 export const register = async (req, res) => {

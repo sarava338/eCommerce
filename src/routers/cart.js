@@ -5,9 +5,9 @@ import {
   getCart,
   postCart,
   updateCart,
-} from "../controllers/cart.controller.js";
-import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
-import { verifyTokenAndUser } from "../middleware/auth.middleware.js";
+} from "../controllers/cart.js";
+import { mongoDbIdValidator } from "../middleware/mongoose.js";
+import { verifyTokenAndUser } from "../middleware/auth.js";
 
 const router = express.Router();
 

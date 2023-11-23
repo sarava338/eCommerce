@@ -10,7 +10,7 @@ import {
   getFilteredQuery,
   getSkip,
   getSortBy,
-} from "../helpers/mongoose.helper.js";
+} from "../helpers/mongoose.js";
 
 export const postProduct = (req, res) => {
   createProduct(req.body)

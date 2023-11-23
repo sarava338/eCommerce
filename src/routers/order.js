@@ -5,9 +5,9 @@ import {
   getOrder,
   postOrder,
   updateOrder,
-} from "../controllers/order.controller.js";
-import { mongoDbIdValidator } from "../middleware/mongoose.middleware.js";
-import { verifyTokenAndUser } from "../middleware/auth.middleware.js";
+} from "../controllers/order.js";
+import { mongoDbIdValidator } from "../middleware/mongoose.js";
+import { verifyTokenAndUser } from "../middleware/auth.js";
 
 const router = express.Router();
 

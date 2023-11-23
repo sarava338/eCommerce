@@ -1,7 +1,7 @@
 import express from "express";
-import adminUserRouter from "./adminRoutes/user.adminRoute.js";
-import adminProductRouter from "./adminRoutes/product.adminRoute.js";
-import { verifyTokenAndAdmin } from "../middleware/auth.middleware.js";
+import adminUserRouter from "./adminRoutes/user.js";
+import adminProductRouter from "./adminRoutes/product.js";
+import { verifyTokenAndAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 
