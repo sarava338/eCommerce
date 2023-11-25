@@ -1,4 +1,5 @@
 import { statusCodes } from "../utils/constants.js";
+import Log from "./Log.js";
 
 export default class ApiError extends Error {
   constructor(message, code) {
@@ -17,4 +18,5 @@ export async function sendError(res, err, customCode, customMessage) {
   await res
     .status(error.code || statusCodes.INTERNAL_SERVER_ERROR)
     .json({ status: false, error });
+  Log.error("APIERROR", error.code, error.message.replaceAll(" ", "_"));
 }
