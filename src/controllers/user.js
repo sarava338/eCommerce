@@ -10,6 +10,7 @@ import {
   getUserWithoutPassword,
 } from "../helpers/user.js";
 import { statusCodes } from "../utils/constants.js";
+import ApiError, { sendError } from "../libraries/ErrorHandler.js";
 
 export const updateUser = async (req, res) => {
   try {
@@ -20,9 +21,7 @@ export const updateUser = async (req, res) => {
       .status(statusCodes.OK)
       .json({ status: true, user: getUserDetails(user) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -35,9 +34,7 @@ export const deleteUser = async (req, res) => {
       .status(statusCodes.OK)
       .json({ status: true, user: getUserDetails(user) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -49,9 +46,7 @@ export const getUser = async (req, res) => {
       .status(statusCodes.OK)
       .json({ status: true, user: getUserWithoutPassword(user) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -63,9 +58,7 @@ export const getAllUsers = async (req, res) => {
       .status(statusCodes.OK)
       .json({ status: true, users: getAllUsersWithoutPasswords(users) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -78,9 +71,7 @@ export const blockUser = async (req, res) => {
       .status(statusCodes.OK)
       .json({ status: true, user: getUserWithoutPassword(user) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -93,8 +84,6 @@ export const unBlockUser = async (req, res) => {
       .status(statusCodes.OK)
       .json({ status: true, user: getUserWithoutPassword(user) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };

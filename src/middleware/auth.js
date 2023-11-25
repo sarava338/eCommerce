@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config.js";
 import { statusCodes } from "../utils/constants.js";
-import ApiError from "../libraries/ErrorHandler.js";
+import ApiError, { sendError } from "../libraries/ErrorHandler.js";
 
 export const verifyToken = (req, res, next) => {
   try {
@@ -14,9 +14,7 @@ export const verifyToken = (req, res, next) => {
     } else throw new ApiError("No token found", statusCodes.UNAUTHORIZED);
     next();
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -28,9 +26,7 @@ export const verifyTokenAndAdmin = (req, res, next) => {
       next();
     });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -42,8 +38,6 @@ export const verifyTokenAndUser = (req, res, next) => {
       next();
     });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };

@@ -12,7 +12,7 @@ import {
   getSortBy,
 } from "../helpers/mongoose.js";
 import { statusCodes } from "../utils/constants.js";
-import ApiError from "../libraries/ErrorHandler.js";
+import ApiError, { sendError } from "../libraries/ErrorHandler.js";
 
 export const postProduct = async (req, res) => {
   try {
@@ -20,13 +20,8 @@ export const postProduct = async (req, res) => {
     res.status(statusCodes.CREATED).json({ status: true, product });
   } catch (error) {
     if (error.code === 11000)
-      return res
-        .status(statusCodes.CONFLICT)
-        .json({ status: false, message: "Product already exists", error });
-    else
-      res
-        .status(statusCodes.INTERNAL_SERVER_ERROR)
-        .json({ status: false, error });
+      sendError(res, error, statusCodes.CONFLICT, "Product already exists");
+    else sendError(res, error);
   }
 };
 
@@ -46,9 +41,7 @@ export const getAllProducts = async (req, res) => {
 
     res.status(statusCodes.OK).json({ status: true, products });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -59,9 +52,7 @@ export const getProduct = async (req, res) => {
       throw new ApiError("product not found", statusCodes.NOT_FOUND);
     res.status(statusCodes.OK).json({ status: true, product });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -72,9 +63,7 @@ export const updateProduct = async (req, res) => {
       throw new ApiError("product not found to update", statusCodes.NOT_FOUND);
     res.status(statusCodes.OK).json({ status: true, product });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -85,8 +74,6 @@ export const deleteProduct = async (req, res) => {
       throw new ApiError("product not found to delete", statusCodes.NOT_FOUND);
     res.status(statusCodes.OK).json({ status: true, product });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };

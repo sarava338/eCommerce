@@ -14,7 +14,7 @@ import {
   encryptPassword,
   createPasswordResetToken,
 } from "../services/crypto.js";
-import ApiError from "../libraries/ErrorHandler.js";
+import ApiError, { sendError } from "../libraries/ErrorHandler.js";
 
 export const register = async (req, res) => {
   try {
@@ -38,12 +38,8 @@ export const register = async (req, res) => {
       .json({ status: true, user: getUserDetails(user) });
   } catch (error) {
     if (error.code === 11000)
-      return res
-        .status(statusCodes.CONFLICT)
-        .json({ status: false, message: "User already exists", error });
-    res
-      .status(statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+      return sendError(res, error, statusCodes.CONFLICT, "User already exists");
+    sendError(res, error);
   }
 };
 
@@ -66,9 +62,7 @@ export const login = async (req, res) => {
 
     res.json({ status: true, user: getUserDetails(user) });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -81,9 +75,7 @@ export const logout = async (req, res) => {
     res.clearCookie("token", { httpOnly: true, secure: true });
     return res.status(statusCodes.NO_CONTENT).send();
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -101,9 +93,7 @@ export const updatePassword = async (req, res) => {
       user,
     });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -154,9 +144,7 @@ export const forgotPassword = async (req, res) => {
       passwordResetToken: null,
       passwordResetTokenExpires: null,
     });
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -165,8 +153,6 @@ export const resetPassword = async (req, res) => {
     const { token } = req.params;
     res.json({ token });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };

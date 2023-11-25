@@ -1,6 +1,20 @@
+import { statusCodes } from "../utils/constants.js";
+
 export default class ApiError extends Error {
-  constructor(message, statusCode) {
+  constructor(message, code) {
     super(message);
-    this.statusCode = statusCode;
+    this.code = code;
+    this.message = message;
   }
+}
+
+export async function sendError(res, err, customCode, customMessage) {
+  const error = {
+    message: customMessage || err.message,
+    code: customCode || err.code,
+    stack: err.stack,
+  };
+  await res
+    .status(error.code || statusCodes.INTERNAL_SERVER_ERROR)
+    .json({ status: false, error });
 }

@@ -1,4 +1,4 @@
-import ApiError from "../libraries/ErrorHandler.js";
+import ApiError, { sendError } from "../libraries/ErrorHandler.js";
 import {
   createCart,
   deleteCartById,
@@ -13,12 +13,8 @@ export const postCart = async (req, res) => {
     res.status(statusCodes.CREATED).json(await createCart(req.body));
   } catch (error) {
     if (error.code === 11000)
-      res
-        .status(statusCodes.CONFLICT)
-        .json({ status: false, message: "Cart already exists", error });
-    res
-      .status(statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+      sendError(res, error, statusCodes.CONFLICT, "cart already exists");
+    sendError(res,error)
   }
 };
 
@@ -29,9 +25,7 @@ export const getAllCarts = async (req, res) => {
       res.status(statusCodes.NOT_FOUND).json({ message: "No cart found" });
     else res.json({ status: true, carts });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -41,9 +35,7 @@ export const getCart = async (req, res) => {
     if (!cart) throw new ApiError("cart not found", statusCodes.NOT_FOUND);
     res.json({ status: true, cart });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -54,9 +46,7 @@ export const updateCart = async (req, res) => {
       throw new ApiError("cart not found to update", statusCodes.NOT_FOUND);
     res.json({ status: true, cart });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
 
@@ -67,8 +57,6 @@ export const deleteCart = async (req, res) => {
       throw new ApiError("cart not found to delete", statusCodes.NOT_FOUND);
     res.json({ status: true, cart });
   } catch (error) {
-    res
-      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
-      .json({ status: false, error });
+    sendError(res, error);
   }
 };
