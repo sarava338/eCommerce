@@ -5,7 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon src/app.js --watch"
+    "dev": "nodemon src/app.js --watch",
+    "server": "node src/app.js"
   },
   "repository": {
     "type": "git",
