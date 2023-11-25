@@ -1,3 +1,4 @@
+import ApiError from "../libraries/ErrorHandler.js";
 import {
   createOrder,
   deleteOrderById,
@@ -5,48 +6,71 @@ import {
   findOrderById,
   updateOrderById,
 } from "../models/Order.js";
+import { statusCodes } from "../utils/constants.js";
 
-export const postOrder = (req, res) => {
-  createOrder(req.body)
-    .then((order) => res.status(201).json(order))
-    .catch((err) => {
-      if (err.code === 11000)
-        res.status(409).json({ message: "Order already exists", err });
-      else res.status(500).json(err);
-    });
+export const postOrder = async (req, res) => {
+  try {
+    const order = await createOrder(req.body);
+    res.status(statusCodes.CREATED).json({ status: true, order });
+  } catch (error) {
+    if (error.code === 11000)
+      res
+        .status(statusCodes.CONFLICT)
+        .json({ status: false, message: "Order already exists", error });
+    else
+      res
+        .status(statusCodes.INTERNAL_SERVER_ERROR)
+        .json({ status: false, error });
+  }
 };
 
-export const getAllOrders = (req, res) => {
-  findAllOrders()
-    .then((orders) => {
-      if (orders.length === 0)
-        res.status(404).json({ message: "No order found" });
-      else res.status(200).json(orders);
-    })
-    .catch((err) => res.json(err));
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await findAllOrders();
+    if (orders.length === 0)
+      throw new ApiError("no odrder found", statusCodes.NOT_FOUND);
+    else res.status(statusCodes.OK).json({ status: true, orders });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const getOrder = (req, res) => {
-  findOrderById(req.params.id)
-    .then((order) => {
-      if (!order) return res.status(404).json({ message: "order not found" });
-      res.status(200).json(order);
-    })
-    .catch((err) => res.json(err));
+export const getOrder = async (req, res) => {
+  try {
+    const order = await findOrderById(req.params.id);
+    if (!order) throw new ApiError("order not found", statusCodes.NOT_FOUND);
+    res.status(statusCodes.OK).json({ status: true, order });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const updateOrder = (req, res) => {
-  updateOrderById(req.params.id, req.body)
-    .then((order) => res.status(200).json(order))
-    .catch((err) => res.json(err));
+export const updateOrder = async (req, res) => {
+  try {
+    const order = await updateOrderById(req.params.id, req.body);
+    if (!order)
+      throw new ApiError("order not found to update", statusCodes.NOT_FOUND);
+    res.status(statusCodes.OK).json({ status: true, order });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const deleteOrder = (req, res) => {
-  deleteOrderById(req.params.id)
-    .then((order) => {
-      if (!order)
-        return res.status(404).json({ message: "order not found to delete" });
-      res.status(202).json({ message: "order deleted" });
-    })
-    .catch((err) => res.json(err));
+export const deleteOrder = async (req, res) => {
+  try {
+    const order = await deleteOrderById(req.params.id);
+    if (!order)
+      throw new ApiError("order not found to delete", statusCodes.NOT_FOUND);
+    res.status(statusCodes.OK).json({ status: true, order });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };

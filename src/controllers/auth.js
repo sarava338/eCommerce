@@ -1,5 +1,5 @@
 import { config } from "../config.js";
-import constants from "../utils/constants.js";
+import constants, { statusCodes } from "../utils/constants.js";
 import { sendEmail } from "../services/mail.js";
 import { getUserDetails } from "../helpers/user.js";
 import { generateToken } from "../services/jwt.js";
@@ -7,7 +7,6 @@ import {
   createUser,
   findUserByEmail,
   changePasswordById,
-  updateUserById,
   updateUserByEmail,
 } from "../models/User.js";
 import {
@@ -15,98 +14,116 @@ import {
   encryptPassword,
   createPasswordResetToken,
 } from "../services/crypto.js";
+import ApiError from "../libraries/ErrorHandler.js";
 
-/** Register */
 export const register = async (req, res) => {
-  createUser({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: encryptPassword(req.body.password),
-    role: req.body.role,
-  })
-    .then((user) => {
-      const token = generateToken(user);
-
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        maxAge: constants.THREE_DAYS,
-      });
-
-      return res.status(201).json({
-        ...getUserDetails(user),
-      });
-    })
-    .catch((err) => {
-      if (err.code == 11000 /** Dublicate resource code */)
-        return res.status(409).json({ message: "User already exists" });
-      return res.json(err);
+  try {
+    const user = await createUser({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: encryptPassword(req.body.password),
+      role: req.body.role,
     });
+
+    const token = await generateToken(user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: constants.THREE_DAYS,
+    });
+
+    res
+      .status(statusCodes.CREATED)
+      .json({ status: true, user: getUserDetails(user) });
+  } catch (error) {
+    if (error.code === 11000)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ status: false, message: "User already exists", error });
+    res
+      .status(statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-/** Login */
 export const login = async (req, res) => {
-  findUserByEmail({ email: req.body.email })
-    .then((user) => {
-      if (req.body.password !== decryptPassword(user.password))
-        return res.status(403).json({ message: "Forbidden credential" });
+  try {
+    const { email, password } = req.body;
 
-      const token = generateToken(user);
+    const user = await findUserByEmail({ email });
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        maxAge: constants.THREE_DAYS,
-      });
+    if (!user) throw new ApiError("User not found", statusCodes.NOT_FOUND);
+    if (password !== decryptPassword(user.password))
+      throw new ApiError("Password not matched", statusCodes.UNAUTHORIZED);
 
-      return res.status(200).json({
-        ...getUserDetails(user),
-      });
-    })
-    .catch((err) => res.json(err));
+    const token = await generateToken(user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: constants.THREE_DAYS,
+    });
+
+    res.json({ status: true, user: getUserDetails(user) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-/** Logout */
 export const logout = async (req, res) => {
-  findUserByEmail({ email: req.body.email })
-    .then((user) => {
-      res.clearCookie("token", { httpOnly: true, secure: true });
-      return res.status(204).json({ message: "User logged out successfully" });
-    })
-    .catch((err) => res.json(err));
+  try {
+    const user = await findUserByEmail({ email: req.body.email });
+
+    if (!user) throw new ApiError("User not found", statusCodes.NOT_FOUND);
+
+    res.clearCookie("token", { httpOnly: true, secure: true });
+    return res.status(statusCodes.NO_CONTENT).send();
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
 /** Change Password */
 export const updatePassword = async (req, res) => {
-  const { id } = req.user;
-  const { password, ...otherData } = req.body;
-  changePasswordById(id, { password: encryptPassword(password) })
-    .then((user) => {
-      res.status(200).json({
-        message: "password updated successfully",
-        email: user.email,
-      });
-    })
-    .catch((error) => res.json({ message: "password not updated", error }));
+  try {
+    const { id } = req.user;
+    const { password, ...otherData } = req.body;
+    const user = await changePasswordById(id, {
+      password: encryptPassword(password),
+    });
+    res.json({
+      status: true,
+      message: "password updated successfully",
+      user,
+    });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
 export const forgotPassword = async (req, res) => {
   const { email, ...otherData } = req.body;
+  try {
+    const { passwordRandomString, passwordResetToken } =
+      createPasswordResetToken();
+    const passwordResetTokenExpires = Date.now() + constants.TEN_MINS;
 
-  const { passwordRandomString, passwordResetToken } =
-    createPasswordResetToken();
-  const passwordResetTokenExpires = Date.now() + constants.TEN_MINS;
+    const user = await updateUserByEmail(email, {
+      passwordResetToken,
+      passwordResetTokenExpires,
+    });
+    if (!user) throw new ApiError("user not found", statusCodes.NOT_FOUND);
 
-  const user = await updateUserByEmail(email, {
-    passwordResetToken,
-    passwordResetTokenExpires,
-  });
-  if (!user) return res.status(404).json({ message: "User not found" });
+    const { protocol, host, port, apiBasePath } = config;
+    const resetUrl = `${protocol}://${host}:${port}${apiBasePath}/auth/reset-password/${passwordRandomString}`;
 
-  const resetUrl = `http://localhost:8080/api/v1/auth/reset-password/${passwordRandomString}`;
-
-  const message = `<h1>Hi ${user.firstName},</h1><br/><br/>
+    const message = `<h1>Hi ${user.firstName},</h1><br/><br/>
       We have recieved a password reset request. To reset the password please click the below link.
       <br/><br/>
       link: <a href="${resetUrl}">Click here</a>
@@ -120,7 +137,6 @@ export const forgotPassword = async (req, res) => {
       By,
       SaraCart`;
 
-  try {
     const emailSentResponse = await sendEmail({
       to: user.email,
       text: `Hey ${user.firstName}`,
@@ -128,24 +144,29 @@ export const forgotPassword = async (req, res) => {
       html: message,
     });
 
-    res.status(200).json({
-      status: "success",
+    res.json({
+      status: true,
       message: `password reset email has been sent : message - ${emailSentResponse.response}`,
-      token: passwordRandomString,
+      token: passwordRandomString, //for testing only
     });
   } catch (error) {
     await updateUserByEmail(email, {
       passwordResetToken: null,
       passwordResetTokenExpires: null,
     });
-    res.status(500).json({
-      message: `not able to send password reset email : error - ${error.message}`,
-      error,
-    });
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
   }
 };
 
 export const resetPassword = async (req, res) => {
-  const { token } = req.params;
-  res.json({ token });
+  try {
+    const { token } = req.params;
+    res.json({ token });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };

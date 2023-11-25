@@ -11,58 +11,82 @@ import {
   getSkip,
   getSortBy,
 } from "../helpers/mongoose.js";
+import { statusCodes } from "../utils/constants.js";
+import ApiError from "../libraries/ErrorHandler.js";
 
-export const postProduct = (req, res) => {
-  createProduct(req.body)
-    .then((product) => res.status(201).json(product))
-    .catch((err) => {
-      if (err.code === 11000)
-        res.status(409).json({ message: "Product already exists", err });
-      else res.status(500).json(err);
-    });
+export const postProduct = async (req, res) => {
+  try {
+    const product = await createProduct(req.body);
+    res.status(statusCodes.CREATED).json({ status: true, product });
+  } catch (error) {
+    if (error.code === 11000)
+      return res
+        .status(statusCodes.CONFLICT)
+        .json({ status: false, message: "Product already exists", error });
+    else
+      res
+        .status(statusCodes.INTERNAL_SERVER_ERROR)
+        .json({ status: false, error });
+  }
 };
 
-export const getAllProducts = (req, res) => {
-  let { sort, limit, page, fields, ...query } = req?.query;
+export const getAllProducts = async (req, res) => {
+  try {
+    let { sort, limit, page, fields, ...query } = req?.query;
 
-  query = getFilteredQuery(query);
-  sort = getSortBy(sort);
-  fields = getFieldsBy(fields);
-  const skip = getSkip(page, limit);
+    query = getFilteredQuery(query);
+    sort = getSortBy(sort);
+    fields = getFieldsBy(fields);
+    const skip = getSkip(page, limit);
 
-  findAllProducts(query, sort, fields, limit, skip)
-    .then((products) => {
-      if (products.length === 0)
-        res.status(404).json({ message: "No product found" });
-      else res.status(200).json(products);
-    })
-    .catch((err) => res.json(err));
+    const products = await findAllProducts(query, sort, fields, limit, skip);
+
+    if (products.length === 0)
+      throw new ApiError("no product found", statusCodes.NOT_FOUND);
+
+    res.status(statusCodes.OK).json({ status: true, products });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const getProduct = (req, res) => {
-  findProductById(req.params.id)
-    .then((product) => {
-      if (!product)
-        return res.status(404).json({ message: "product not found" });
-      res.status(200).json(product);
-    })
-    .catch((err) =>
-      res.status(404).json({ message: "product not found", err })
-    );
+export const getProduct = async (req, res) => {
+  try {
+    const product = await findProductById(req.params.id);
+    if (!product)
+      throw new ApiError("product not found", statusCodes.NOT_FOUND);
+    res.status(statusCodes.OK).json({ status: true, product });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const updateProduct = (req, res) => {
-  updateProductById(req.params.id, req.body)
-    .then((product) => res.status(200).json(product))
-    .catch((err) => res.json(err));
+export const updateProduct = async (req, res) => {
+  try {
+    const product = await updateProductById(req.params.id, req.body);
+    if (!product)
+      throw new ApiError("product not found to update", statusCodes.NOT_FOUND);
+    res.status(statusCodes.OK).json({ status: true, product });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const deleteProduct = (req, res) => {
-  deleteProductById(req.params.id)
-    .then((product) => {
-      if (!product)
-        return res.status(404).json({ message: "product not found to delete" });
-      res.status(202).json({ message: "product deleted" });
-    })
-    .catch((err) => res.json(err));
+export const deleteProduct = async (req, res) => {
+  try {
+    const product = await deleteProductById(req.params.id);
+    if (!product)
+      throw new ApiError("product not found to delete", statusCodes.NOT_FOUND);
+    res.status(statusCodes.OK).json({ status: true, product });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };

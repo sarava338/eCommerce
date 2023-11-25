@@ -9,58 +9,92 @@ import {
   getAllUsersWithoutPasswords,
   getUserWithoutPassword,
 } from "../helpers/user.js";
+import { statusCodes } from "../utils/constants.js";
 
-export const updateUser = (req, res) => {
-  updateUserById(req.params.id, req.body)
-    .then((user) => {
-      res.status(200).json(getUserDetails(user));
-    })
-    .catch((err) => res.json(err));
+export const updateUser = async (req, res) => {
+  try {
+    const user = await updateUserById(req.params.id, req.body);
+    if (!user)
+      throw new Error("user not found to update", statusCodes.NOT_FOUND);
+    res
+      .status(statusCodes.OK)
+      .json({ status: true, user: getUserDetails(user) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const deleteUser = (req, res) => {
-  deleteUserById(req.params.id)
-    .then((user) => res.status(202).json({ message: "User deleted" }))
-    .catch((err) => res.json(err));
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await deleteUserById(req.params.id);
+    if (!user)
+      throw new Error("user not found to delete", statusCodes.NOT_FOUND);
+    res
+      .status(statusCodes.OK)
+      .json({ status: true, user: getUserDetails(user) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const getUser = (req, res) => {
-  findUserById(req.params.id)
-    .then((user) => {
-      if (!user) return res.status(404).json({ message: "User not found" });
-      else return res.status(200).json(getUserWithoutPassword(user));
-    })
-    .catch((err) => res.json(err));
+export const getUser = async (req, res) => {
+  try {
+    const user = await findUserById(req.params.id);
+    if (!user) throw new ApiError("User not found", statusCodes.NOT_FOUND);
+    res
+      .status(statusCodes.OK)
+      .json({ status: true, user: getUserWithoutPassword(user) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const getAllUsers = (req, res) => {
-  findAllUsers()
-    .then((users) => {
-      if (users.length === 0)
-        res.status(404).json({ message: "No user found" });
-      else res.status(200).json(getAllUsersWithoutPasswords(users));
-    })
-    .catch((err) => res.json(err));
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await findAllUsers();
+    if (!users) throw new ApiError("no user found", statusCodes.NOT_FOUND);
+    res
+      .status(statusCodes.OK)
+      .json({ status: true, users: getAllUsersWithoutPasswords(users) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const blockUser = (req, res) => {
-  updateUserById(req.params.id, { isBlocked: true })
-    .then((user) =>
-      res.status(200).json({
-        message: "User blocked successfully",
-        blocked: user.isBlocked,
-      })
-    )
-    .catch((err) => res.json(err));
+export const blockUser = async (req, res) => {
+  try {
+    const user = await updateUserById(req.params.id, { isBlocked: true });
+    if (!user)
+      throw new ApiError("user not found to block", statusCodes.NOT_FOUND);
+    res
+      .status(statusCodes.OK)
+      .json({ status: true, user: getUserWithoutPassword(user) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
 
-export const unBlockUser = (req, res) => {
-  updateUserById(req.params.id, { isBlocked: false })
-    .then((user) =>
-      res.status(200).json({
-        message: "User unblocked successfully",
-        blocked: user.isBlocked,
-      })
-    )
-    .catch((err) => res.json(err));
+export const unBlockUser = async (req, res) => {
+  try {
+    const user = await updateUserById(req.params.id, { isBlocked: false });
+    if (!user)
+      throw new ApiError("user not found to unblock", statusCodes.NOT_FOUND);
+    res
+      .status(statusCodes.OK)
+      .json({ status: true, user: getUserWithoutPassword(user) });
+  } catch (error) {
+    res
+      .status(error.statusCode || statusCodes.INTERNAL_SERVER_ERROR)
+      .json({ status: false, error });
+  }
 };
