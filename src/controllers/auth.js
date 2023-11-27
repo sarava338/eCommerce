@@ -1,19 +1,12 @@
-import { config } from "../config.js";
 import constants, { statusCodes } from "../utils/constants.js";
-import { sendEmail } from "../services/mail.js";
 import { getUserDetails } from "../helpers/user.js";
 import { generateToken } from "../services/jwt.js";
 import {
   createUser,
   findUserByEmail,
   changePasswordById,
-  updateUserByEmail,
 } from "../models/User.js";
-import {
-  decryptPassword,
-  encryptPassword,
-  createPasswordResetToken,
-} from "../services/crypto.js";
+import { decryptPassword, encryptPassword } from "../services/crypto.js";
 import ApiError, { sendError } from "../libraries/ErrorHandler.js";
 
 export const register = async (req, res) => {
@@ -79,7 +72,6 @@ export const logout = async (req, res) => {
   }
 };
 
-/** Change Password */
 export const updatePassword = async (req, res) => {
   try {
     const { id } = req.user;
@@ -92,66 +84,6 @@ export const updatePassword = async (req, res) => {
       message: "password updated successfully",
       user,
     });
-  } catch (error) {
-    sendError(res, error);
-  }
-};
-
-export const forgotPassword = async (req, res) => {
-  const { email, ...otherData } = req.body;
-  try {
-    const { passwordRandomString, passwordResetToken } =
-      createPasswordResetToken();
-    const passwordResetTokenExpires = Date.now() + constants.TEN_MINS;
-
-    const user = await updateUserByEmail(email, {
-      passwordResetToken,
-      passwordResetTokenExpires,
-    });
-    if (!user) throw new ApiError("user not found", statusCodes.NOT_FOUND);
-
-    const { protocol, host, port, apiBasePath } = config;
-    const resetUrl = `${protocol}://${host}:${port}${apiBasePath}/auth/reset-password/${passwordRandomString}`;
-
-    const message = `<h1>Hi ${user.firstName},</h1><br/><br/>
-      We have recieved a password reset request. To reset the password please click the below link.
-      <br/><br/>
-      link: <a href="${resetUrl}">Click here</a>
-      <br/><br/>
-      If above like not worked, Please paste the below link in a browser
-      <br/><br/>
-      ${resetUrl}
-      <br/><br/>
-      This password reset link will be valid only for next 10 mins
-      <br/><br/><br/><br/>
-      By,
-      SaraCart`;
-
-    const emailSentResponse = await sendEmail({
-      to: user.email,
-      text: `Hey ${user.firstName}`,
-      subject: "SaraCart - Password change Request recieved",
-      html: message,
-    });
-
-    res.json({
-      status: true,
-      message: `password reset email has been sent : message - ${emailSentResponse.response}`,
-      token: passwordRandomString, //for testing only
-    });
-  } catch (error) {
-    await updateUserByEmail(email, {
-      passwordResetToken: null,
-      passwordResetTokenExpires: null,
-    });
-    sendError(res, error);
-  }
-};
-
-export const resetPassword = async (req, res) => {
-  try {
-    const { token } = req.params;
-    res.json({ token });
   } catch (error) {
     sendError(res, error);
   }
