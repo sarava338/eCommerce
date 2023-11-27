@@ -12,17 +12,21 @@ npm run server
 
 ## Environment variables
 
+PROTOCOL = 'http'
+
+HOST = 'localhost'
+
 PORT="8080"
 
 API_BASEPATH="api/v1"
 
 
-MONGO_URL=""
+MONGO_URL="mongodb://localhost:27017/eCommerce"
 
 
-JWT_SECRET=""
+JWT_SECRET="myecommerceapp"
 
-CRYPTO_SECRET=""
+CRYPTO_SECRET="myecommerceapp"
 
 
 SMTP_SERVICE="smtp.gmail.com"
@@ -30,7 +34,7 @@ SMTP_SERVICE="smtp.gmail.com"
 SMTP_PORT="465"
 
 
-GMAIL_USER="*@gmail.com"
+GMAIL_USER="your_mail@gmail.com"
 
 GMAIL_API_CLIENT_ID=""
 
